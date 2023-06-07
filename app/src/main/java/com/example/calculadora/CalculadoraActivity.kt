@@ -2,63 +2,139 @@ package com.example.calculadora
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import java.io.DataOutput
+import java.util.Arrays
+import kotlin.math.log
 
 class CalculadoraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculadora)
-        var btnUno = findViewById<Button>(R.id.btnUno)
-        var btnDos = findViewById<Button>(R.id.btnDos)
-        var btnTres = findViewById<Button>(R.id.btnTres)
-        var btnCuatro = findViewById<Button>(R.id.btnCuatro)
-        var btnCinco = findViewById<Button>(R.id.btnCinco)
-        var btnSeis = findViewById<Button>(R.id.btnSeis)
-        var btnSiete = findViewById<Button>(R.id.btnSiete)
-        var btnOcho = findViewById<Button>(R.id.btnOcho)
-        var btnNueve = findViewById<Button>(R.id.btnNueve)
-        var btnCero = findViewById<Button>(R.id.btnCero)
-        var btnPunto = findViewById<Button>(R.id.btnPunto)
-        var btnSuma = findViewById<Button>(R.id.btnSuma)
-        var btnResta = findViewById<Button>(R.id.btnResta)
-        var btnDivision = findViewById<Button>(R.id.btnDivision)
-        var btnMultiplicacion = findViewById<Button>(R.id.btnMultiplicacion)
-        var btnResultado = findViewById<Button>(R.id.btnResultado)
-        var btnBorrar = findViewById<Button>(R.id.btnBorrar)
-        var btnRetroceso = findViewById<Button>(R.id.btnRetroceso)
-        var tvResultado = findViewById<TextView>(R.id.tvResultado)
+        val btnUno = findViewById<Button>(R.id.btnUno)
+        val btnDos = findViewById<Button>(R.id.btnDos)
+        val btnTres = findViewById<Button>(R.id.btnTres)
+        val btnCuatro = findViewById<Button>(R.id.btnCuatro)
+        val btnCinco = findViewById<Button>(R.id.btnCinco)
+        val btnSeis = findViewById<Button>(R.id.btnSeis)
+        val btnSiete = findViewById<Button>(R.id.btnSiete)
+        val btnOcho = findViewById<Button>(R.id.btnOcho)
+        val btnNueve = findViewById<Button>(R.id.btnNueve)
+        val btnCero = findViewById<Button>(R.id.btnCero)
+        val btnPunto = findViewById<Button>(R.id.btnPunto)
+        val btnSuma = findViewById<Button>(R.id.btnSuma)
+        val btnResta = findViewById<Button>(R.id.btnResta)
+        val btnDivision = findViewById<Button>(R.id.btnDivision)
+        val btnMultiplicacion = findViewById<Button>(R.id.btnMultiplicacion)
+        val btnResultado = findViewById<Button>(R.id.btnResultado)
+        val btnBorrar = findViewById<Button>(R.id.btnBorrar)
+        val btnRetroceso = findViewById<Button>(R.id.btnRetroceso)
+        val tvResultado = findViewById<TextView>(R.id.tvResultado)
+        val mtPantalla = findViewById<EditText>(R.id.mtPantalla)
         btnUno.setOnClickListener{
             agregarDato("1")
         }
-        btnUno.setOnClickListener{
+        btnDos.setOnClickListener{
             agregarDato("2")
         }
-        btnUno.setOnClickListener{
+        btnTres.setOnClickListener{
             agregarDato("3")
         }
-        btnUno.setOnClickListener{
+        btnCuatro.setOnClickListener{
             agregarDato("4")
         }
-        btnUno.setOnClickListener{
+        btnCinco.setOnClickListener{
             agregarDato("5")
         }
-        btnUno.setOnClickListener{
+        btnSeis.setOnClickListener{
             agregarDato("6")
         }
-        btnUno.setOnClickListener{
+        btnSiete.setOnClickListener{
             agregarDato("7")
         }
-        btnUno.setOnClickListener{
+        btnOcho.setOnClickListener{
             agregarDato("8")
         }
-        btnUno.setOnClickListener{
+        btnNueve.setOnClickListener{
             agregarDato("9")
         }
-        btnUno.setOnClickListener{
-            agregarDato("10")
+        btnCero.setOnClickListener{
+            agregarDato("0")
+        }
+        btnSuma.setOnClickListener {
+            if (!mtPantalla.text.isNullOrEmpty()) {
+                if (mtPantalla.text.split(" ").last() != ""){
+                    agregarDato(" + ")
+                }
+            }
+        }
+        btnResta.setOnClickListener {
+            if (!mtPantalla.text.isNullOrEmpty()) {
+                if (mtPantalla.text.split(" ").last() != ""){
+                    agregarDato(" - ")
+                }
+            }
+        }
+        btnDivision.setOnClickListener {
+            if (!mtPantalla.text.isNullOrEmpty()) {
+                if (mtPantalla.text.split(" ").last() != ""){
+                    agregarDato(" / ")
+                }
+            }
+        }
+        btnMultiplicacion.setOnClickListener {
+            if (!mtPantalla.text.isNullOrEmpty()) {
+                if (mtPantalla.text.split(" ").last() != ""){
+                    agregarDato(" * ")
+                }
+            }
+        }
+        btnPunto.setOnClickListener {
+            agregarDato(".")
+        }
+        btnBorrar.setOnClickListener {
+            mtPantalla.setText("")
+        }
+        btnRetroceso.setOnClickListener {
+            if (!mtPantalla.text.isNullOrEmpty()){var txt = mtPantalla.text.split("")
+                txt = txt.dropLast(1)
+                txt = txt.drop(1)
+                if (txt[(txt.count()-1)] == " "){
+                    txt = txt.dropLast(3)
+                } else {
+                    txt = txt.dropLast(1)
+                }
+                var res = ""
+                txt.forEach { res += it }
+                mtPantalla.setText(res)
+            }
+        }
+        btnResultado.setOnClickListener {
+            val operacion = mtPantalla.text.split(" ")
+            var resul = 0
+            if (operacion.count() >= 3){
+                for (i in (0 until (operacion.count())) step 2){
+                    if (resul == 0){
+                        resul = operacion[0].toInt();
+                    }
+                    if (i != (operacion.count()-1)){
+                        if (operacion[i+1] == "+"){
+                            resul += operacion[i+2].toInt()
+                        } else if (operacion[i+1] == "-"){
+                            resul -= operacion[i+2].toInt()
+                        } else if (operacion[i+1] == "/"){
+                            resul /= operacion[i+2].toInt()
+                        } else if (operacion[i+1] == "*"){
+                            resul *= operacion[i+2].toInt()
+                        }
+                    }
+                }
+                tvResultado.setText("" + resul)
+            }else {
+
+            }
         }
     }
 

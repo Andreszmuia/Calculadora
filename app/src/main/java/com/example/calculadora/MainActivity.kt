@@ -1,5 +1,6 @@
 package com.example.calculadora
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -9,6 +10,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         var btnIniciar = findViewById<Button>(R.id.btnIniciar)
-
+        btnIniciar.setOnClickListener {
+            startActivity(Intent(this, CalculadoraActivity ::class.java))
+        }
     }
 }
